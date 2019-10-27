@@ -3,33 +3,63 @@ import { Link } from 'react-router-dom';
 import { Glyphicon, Nav, Navbar, NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import './NavMenu.css';
+import { connect } from 'react-redux';
 
-export default props => (
-  <Navbar inverse fixedTop fluid collapseOnSelect>
-    <Navbar.Header>
-      <Navbar.Brand>
-        <Link to={'/'}>CMS_Prototype</Link>
-      </Navbar.Brand>
-      <Navbar.Toggle />
-    </Navbar.Header>
-    <Navbar.Collapse>
-      <Nav>
-        <LinkContainer to={'/'} exact>
-          <NavItem>
-            <Glyphicon glyph='home' /> Home
-          </NavItem>
-        </LinkContainer>
-        <LinkContainer to={'/counter'}>
-          <NavItem>
-            <Glyphicon glyph='education' /> Counter
-          </NavItem>
-        </LinkContainer>
-        <LinkContainer to={'/fetchdata'}>
-          <NavItem>
-            <Glyphicon glyph='th-list' /> Fetch data
-          </NavItem>
-        </LinkContainer>
-      </Nav>
-    </Navbar.Collapse>
-  </Navbar>
-);
+class NavMenu extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.toggle = this.toggle.bind(this);
+        this.state = {
+            isOpen: false
+        };
+    }
+    toggle() {
+        this.setState({
+            isOpen: !this.state.isOpen
+        });
+    }
+    render() {
+        return (
+            <Navbar inverse fixedTop fluid collapseOnSelect>
+                <Navbar.Header>
+                    <Navbar.Brand>
+                        <Link to={'/'}>CMS_Prototype</Link>
+                    </Navbar.Brand>
+                    <Navbar.Toggle />
+                </Navbar.Header>
+                <Navbar.Collapse>
+                    {this.props.user.isAuthenticated &&
+                        <Nav>
+                            <LinkContainer to={'/upload_video'}>
+                                <NavItem>
+                                     Video
+                            </NavItem>
+                            </LinkContainer>
+                            <LinkContainer to={'/all_videos'}>
+                                <NavItem>
+                                    <Glyphicon glyph='th-list' /> All Videos
+                         </NavItem>
+                            </LinkContainer>
+                        </Nav>
+                    }
+                    {!this.props.user.isAuthenticated &&
+                        <Nav>
+                            <LinkContainer to={'/login'}>
+                                <NavItem>
+                                <Glyphicon /> Login
+                            </NavItem>
+                            </LinkContainer>
+                        </Nav>
+                    }
+                </Navbar.Collapse>
+            </Navbar>
+        );
+    }
+}
+
+function mapStateToProps(state) {
+    return { user: state.user }
+}
+
+export default connect(mapStateToProps)(NavMenu);

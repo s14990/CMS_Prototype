@@ -1,7 +1,9 @@
+using CMS_Prototype.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -26,6 +28,10 @@ namespace CMS_Prototype
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            //Scaffold-DbContext "Server=tcp:cms-grupa-3.database.windows.net,1433;Initial Catalog=cms-main;User ID=cms_admin;Password=useruser0!;MultipleActiveResultSets =False;Encrypt=True;TrustServerCertificate=False;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -f
+            var connection = "Server=tcp:cms-grupa-3.database.windows.net,1433;Initial Catalog=cms-main;User ID=cms_admin;Password=useruser0!;MultipleActiveResultSets =False;Encrypt=True;TrustServerCertificate=False;";
+            services.AddDbContext<cmsmainContext>(options => options.UseSqlServer(connection));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
